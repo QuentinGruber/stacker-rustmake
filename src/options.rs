@@ -7,7 +7,7 @@ pub struct Opt {
     pub width: i32,
     #[structopt(short = "h", long = "height", default_value = "700")]
     pub height: i32,
-    #[structopt(long = "fps", default_value = "60")]
+    #[structopt(long = "fps", default_value = "10")]
     pub fps: u32,
 }
 

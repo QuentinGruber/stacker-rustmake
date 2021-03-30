@@ -2,33 +2,23 @@ use array2d::Array2D;
 use cgmath::Vector2;
 use raylib::prelude::*;
 
+pub fn cleanCurrentLine(
+    board: &mut array2d::Array2D<i32>,
+    current_line: usize,
+) -> &mut array2d::Array2D<i32> {
+    for column in 0..board.column_len() {
+        let result = board.set(column, current_line, 0);
+        assert_eq!(result, Ok(()));
+    }
+    return board;
+}
+
 pub fn createdBoard(lines: usize, columns: usize) -> array2d::Array2D<i32> {
     // Create an array filled with the same element.
     let mut board = Array2D::filled_with(0, lines, columns);
     assert_eq!(board.num_rows(), lines);
     assert_eq!(board.num_columns(), columns);
     assert_eq!(board[(0, 0)], 0);
-
-    let result = board.set(
-        board.column_len() - ((board.row_len() / 3) as usize),
-        board.row_len() - 1,
-        1,
-    );
-    assert_eq!(result, Ok(()));
-
-    let result = board.set(
-        board.column_len() - ((board.row_len() / 3) as usize) + 1,
-        board.row_len() - 1,
-        1,
-    );
-    assert_eq!(result, Ok(()));
-
-    let result = board.set(
-        board.column_len() - ((board.row_len() / 3) as usize) + 2,
-        board.row_len() - 1,
-        1,
-    );
-    assert_eq!(result, Ok(()));
     // Iterate over all rows or columns.
     println!("All elements:");
     for row_iter in board.columns_iter() {
