@@ -17,10 +17,11 @@ impl Opt {
         Opt::from_args()
     }
     pub fn open_window(&self, name: &str) -> (raylib::RaylibHandle, raylib::RaylibThread) {
-        let (rl, thread) = raylib::init()
+        let (mut rl, thread) = raylib::init()
             .size(self.width, self.height)
             .title(name)
             .build();
+        rl.set_target_fps(self.fps);
         (rl, thread)
     }
 }

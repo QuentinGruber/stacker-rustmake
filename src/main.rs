@@ -11,7 +11,6 @@ mod options;
 fn main() {
     let opt = options::Opt::from_args();
     let (mut rl, thread) = opt.open_window("Stacker");
-
     let mut player = Rectangle::new(0.0, 0.0, 0.0, 0.0);
 
     let mut camera = Camera2D {
@@ -20,7 +19,6 @@ fn main() {
         rotation: 0.0,
         zoom: 1.0,
     };
-
     let mut board = engine::createdBoard(7, 15);
     let mut lifes = 3;
     let mut pos = board.column_len() - ((board.row_len() / 3) as usize);
@@ -29,7 +27,6 @@ fn main() {
     let mut time = Instant::now();
     let mut move_speed = 0.5;
     while !rl.window_should_close() {
-        engine::cleanCurrentLine(&mut board, current_line);
         for life in 0..lifes {
             let result = board.set(pos + life, board.row_len() - 1, 1);
             assert_eq!(result, Ok(()));
@@ -41,6 +38,7 @@ fn main() {
         let mut d2 = d.begin_mode2D(camera);
         engine::drawBoard(&mut d2, &mut board);
         if time.elapsed().as_secs_f64() > move_speed {
+            engine::cleanCurrentLine(&mut board, current_line);
             if go_right {
                 if pos <= board.column_len() - (lifes + 1) {
                     pos += 1;
