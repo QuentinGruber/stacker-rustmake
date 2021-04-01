@@ -2,7 +2,6 @@
 //#![windows_subsystem = "windows"]
 use raylib::consts::KeyboardKey::*;
 use raylib::prelude::*;
-use std::thread::sleep;
 use std::time::Instant;
 use structopt::StructOpt;
 
@@ -12,9 +11,9 @@ mod options;
 fn main() {
     let opt = options::Opt::from_args();
     let (mut rl, thread) = opt.open_window("Stacker");
-    let mut player = Rectangle::new(0.0, 0.0, 0.0, 0.0);
+    let player = Rectangle::new(0.0, 0.0, 0.0, 0.0);
 
-    let mut camera = Camera2D {
+    let camera = Camera2D {
         target: Vector2::new(player.x + 20.0, player.y + 20.0),
         offset: Vector2::new(0.0, 0.0),
         rotation: 0.0,

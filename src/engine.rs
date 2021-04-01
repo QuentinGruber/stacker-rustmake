@@ -15,7 +15,7 @@ pub fn cleanCurrentLine(
 
 pub fn createdBoard(lines: usize, columns: usize) -> array2d::Array2D<i32> {
     // Create an array filled with the same element.
-    let mut board = Array2D::filled_with(0, lines, columns);
+    let board = Array2D::filled_with(0, lines, columns);
     assert_eq!(board.num_rows(), lines);
     assert_eq!(board.num_columns(), columns);
     assert_eq!(board[(0, 0)], 0);
@@ -44,7 +44,7 @@ pub fn drawBoard(
                 Some(result) => match result {
                     0 => color = Color::RED,
                     1 => color = Color::PURPLE,
-                    2 => color = Color::BLUE,
+                    2 => color = Color::PINK,
                     3 => color = Color::GREEN,
                     _ => println!("Input does not equal any value"),
                 },
@@ -63,21 +63,38 @@ pub fn drawBoard(
     }
 }
 
+pub fn get_case_value(
+    board: &mut array2d::Array2D<i32>,
+    column: usize,
+    current_line: usize,
+) -> usize {
+    match board.get(column, current_line) {
+        Some(x) => match x {
+            1 => return 1,
+            2 => return 2,
+            3 => return 3,
+            _ => return 0,
+        },
+        None => return 0,
+    };
+}
+
 pub fn checkLoosedLifes(board: &mut array2d::Array2D<i32>, current_line: usize) -> usize {
     if current_line == board.row_len() - 1 {
         return 0;
     } else {
+        let mut loosed_lifes = 0;
         for column in 0..board.column_len() {
-            let test: usize = match board.get(column, current_line) {
-                Some(x) => match x {
-                    1 => return 1,
-                    2 => return 2,
-                    3 => return 3,
-                    _ => return 0,
-                },
-                None => return 0,
-            };
+            let case_value = get_case_value(board, column, current_line);
+            let below_case_value = get_case_value(board, column, current_line + 1);
+            if case_value == 1 {
+                if below_case_value != 1 {
+                    loosed_lifes += 1;
+                    let result = board.set(column, current_line, 0);
+                    assert_eq!(result, Ok(()));
+                }
+            }
         }
-        return 1;
+        return loosed_lifes;
     }
 }
