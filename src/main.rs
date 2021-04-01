@@ -1,5 +1,6 @@
 #![allow(non_snake_case)]
 //#![windows_subsystem = "windows"]
+use raylib::consts::KeyboardKey::*;
 use raylib::prelude::*;
 use std::thread::sleep;
 use std::time::Instant;
@@ -28,10 +29,15 @@ fn main() {
     let mut move_speed = 0.5;
     while !rl.window_should_close() {
         for life in 0..lifes {
-            let result = board.set(pos + life, board.row_len() - 1, 1);
+            let result = board.set(pos + life, current_line, 1);
             assert_eq!(result, Ok(()));
         }
-        engine::debugMovement(&mut rl, &mut player, &mut camera);
+        if rl.is_key_down(KEY_SPACE) {
+            move_speed /= 1.15;
+            let loosed_lifes: usize = engine::checkLoosedLifes(&mut board, current_line);
+            lifes -= loosed_lifes;
+            current_line -= 1;
+        }
         // setup drawing stuff
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::BLUE);

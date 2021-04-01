@@ -63,28 +63,21 @@ pub fn drawBoard(
     }
 }
 
-pub fn debugMovement(
-    rl: &mut raylib::RaylibHandle,
-    player: &mut raylib::prelude::Rectangle,
-    camera: &mut raylib::prelude::Camera2D,
-) -> () {
-    use raylib::consts::KeyboardKey::*;
-
-    if rl.is_key_down(KEY_RIGHT) {
-        player.x += 2.0;
-        camera.offset.x -= 2.0;
-    } else if rl.is_key_down(KEY_LEFT) {
-        player.x -= 2.0;
-        camera.offset.x += 2.0;
+pub fn checkLoosedLifes(board: &mut array2d::Array2D<i32>, current_line: usize) -> usize {
+    if current_line == board.row_len() - 1 {
+        return 0;
+    } else {
+        for column in 0..board.column_len() {
+            let test: usize = match board.get(column, current_line) {
+                Some(x) => match x {
+                    1 => return 1,
+                    2 => return 2,
+                    3 => return 3,
+                    _ => return 0,
+                },
+                None => return 0,
+            };
+        }
+        return 1;
     }
-    if rl.is_key_pressed(KEY_R) {
-        // reset zoom
-        camera.zoom = 1.0;
-        camera.rotation = 0.0;
-    }
-    camera.zoom += rl.get_mouse_wheel_move() as f32 * 0.05;
-    // Limit camera rotation to 80 degrees
-    camera.rotation = camera.rotation.max(-40.0).min(40.0);
-    // zoom controls
-    camera.zoom = camera.zoom.max(0.1).min(3.0);
 }
