@@ -1,5 +1,5 @@
 #![allow(non_snake_case)]
-//#![windows_subsystem = "windows"]
+#![windows_subsystem = "windows"]
 use raylib::consts::KeyboardKey::*;
 use raylib::prelude::*;
 use std::time::Instant;
